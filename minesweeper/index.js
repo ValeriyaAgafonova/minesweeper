@@ -7,6 +7,11 @@ function createField(width, mines) {
   field.innerHTML = '<button class="field__button"></button>'.repeat(
     cellsAmount
   );
+  const bombs = Array(cellsAmount)
+    .fill(0)
+    .fill(1, 0, mines - 1)
+    .sort(() => Math.random() - 0.5);
+  console.log(bombs);
 }
 
 field.addEventListener("mousedown", () => {
