@@ -36,11 +36,14 @@ display: flex;
     background-position: -124px top;
 }
 .heading__smile{
-    height: 24px;
-    width: 24px;
+    height: 26px;
+    width: 26px;
     background-image: url(./assets/images/minesweeper-sprites_9TPZzv3.png);
     background-repeat: no-repeat;
-    background-position: -30px -26px;
+    background-position: 0 -24px;
+}
+.heading__smile_scary{
+    background-position: -54px -24px;
 }
 .heading__first-time{
     background-position: 0px top;
@@ -63,4 +66,5 @@ display: flex;
     background-image: url(./assets/images/minesweeper-sprites_9TPZzv3.png);
     background-repeat: no-repeat;
     background-position: 0 -50px;
+    cursor: pointer;
 }
