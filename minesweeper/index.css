@@ -15,6 +15,8 @@ border-style: ridge;
     padding: 10px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    background-color: rgb(205, 201, 201);
 }
 .heading__bombs-number,
 .heading__timer{
@@ -22,18 +24,18 @@ display: flex;
 }
 .heading__number{
     height: 24px;
-    width: 14px;
+    width: 13px;
     background-image: url(./assets/images/minesweeper-sprites_9TPZzv3.png);
     background-repeat: no-repeat;
 }
 .heading__first-number{
-    background-position: -124px top;
+    background-position: -112px top;
 }
 .heading__second-number{
-    background-position: -40px top;
+    background-position: -42px top;
 }
 .heading__third-number{
-    background-position: -124px top;
+    background-position: -126px top;
 }
 .heading__smile{
     height: 26px;
@@ -46,13 +48,13 @@ display: flex;
     background-position: -54px -24px;
 }
 .heading__first-time{
-    background-position: 0px top;
+    background-position: -126px top;
 }
 .heading__second-time{
-    background-position: -124px top;
+    background-position: -126px top;
 }
 .heading__third-time{
-    background-position: -124px top;
+    background-position: -126px top;
 }
 
 .field{
@@ -70,7 +72,11 @@ display: flex;
     padding: 0;
     border: none;
 }
-
+.field__button:disabled{
+   border: none;
+   list-style: none;
+   background-color: white;
+}
 .field__button_redBomb{
     background-position: -101px -50px;
 }
@@ -84,7 +90,7 @@ display: flex;
     background-position: -16px -50px;
 }
 .field__button_flag{
-    background-position: -32px -50px;
+    background-position: -33px -50px;
 }
 .field__button_question{
     background-position: -50px -50px;
