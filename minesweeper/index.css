@@ -57,14 +57,36 @@ display: flex;
 
 .field{
     display: grid;
-    grid-template-columns: repeat(16, 20px);
+    grid-template-columns: repeat(16, 18px);
    
 }
 .field__button{
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     background-image: url(./assets/images/minesweeper-sprites_9TPZzv3.png);
     background-repeat: no-repeat;
-    background-position: 0 -50px;
+    background-position: 1px -50px;
     cursor: pointer;
+    padding: 0;
+    border: none;
 }
+
+.field__button_redBomb{
+    background-position: -101px -50px;
+}
+.field__button_whiteBomb{
+    background-position: -84px -50px;
+}
+.field__button_noBomb{
+    background-position: -118px -50px;
+}
+.field__button_empty{
+    background-position: -16px -50px;
+}
+.field__button_flag{
+    background-position: -32px -50px;
+}
+.field__button_question{
+    background-position: -50px -50px;
+}
+
