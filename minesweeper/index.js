@@ -3,7 +3,7 @@ const width = 16;
 const bombsAmount = 40;
 let timer = 0;
 let isGameOVer = false;
-const numbersPositionArray = [
+const numbersTimerPositionArray = [
   "-126px top",
   "0px top",
   "-14px top",
@@ -15,7 +15,17 @@ const numbersPositionArray = [
   "-98px top",
   "-112px top",
 ];
-
+const numbersFieldArray = [
+  "-16px -50px",
+  "1px -70px",
+  "-16px -67px",
+  "-32px -67px",
+  "-48px -67px",
+  "-67px -67px",
+  "-84px -67px",
+  "-101px -67px",
+  " -118px -67px",
+];
 
 //creation html field
 createField(width);
@@ -25,35 +35,60 @@ function createField(width) {
   field.innerHTML = '<button class="field__button"></button>'.repeat(
     cellsAmount
   );
- createResultArray()
+  createResultArray();
 }
 
-
 //create new array
-function createResultArray(){
-    const arrayWithBombs = Array(width * width)
+function createResultArray() {
+  const arrayWithBombs = Array(width * width)
     .fill(0)
-    .fill('bomb', 0, bombsAmount - 1)
+    .fill("bomb", 0, bombsAmount - 1)
     .sort(() => Math.random() - 0.5);
-console.log(arrayWithBombs)
+  console.log(arrayWithBombs);
 
-for (let i = 0; i < arrayWithBombs.length; i++) {
-    let total = 0
-    const isLeftEdge = (i % width === 0)
-    const isRightEdge = (i % width === width - 1)
+  for (let i = 0; i < arrayWithBombs.length; i++) {
+    let total = 0;
+    const isLeftEdge = i % width === 0;
+    const isRightEdge = i % width === width - 1;
 
     if (arrayWithBombs[i] === 0) {
-      if (i > 0 && !isLeftEdge && arrayWithBombs[i -1] === 'bomb') total ++
-      if (i > (width - 1) && !isRightEdge && arrayWithBombs[i +1 -width] === 'bomb') total ++
-      if (i > width && arrayWithBombs[i -width] === 'bomb') total ++
-      if (i > width + 1 && !isLeftEdge && arrayWithBombs[i -1 -width] === 'bomb') total ++
-      if (i < (width * width -2) && !isRightEdge && arrayWithBombs[i +1] === 'bomb') total ++
-      if (i < (width * width - width) && !isLeftEdge && arrayWithBombs[i -1 +width] === 'bomb') total ++
-      if (i < (width * width - width - 2) && !isRightEdge && arrayWithBombs[i +1 +width] === 'bomb') total ++
-      if (i < (width * width - width - 1) && arrayWithBombs[i +width] === 'bomb') total ++
-      arrayWithBombs[i] =  total
+      if (i > 0 && !isLeftEdge && arrayWithBombs[i - 1] === "bomb") total++;
+      if (
+        i > width - 1 &&
+        !isRightEdge &&
+        arrayWithBombs[i + 1 - width] === "bomb"
+      )
+        total++;
+      if (i > width && arrayWithBombs[i - width] === "bomb") total++;
+      if (
+        i > width + 1 &&
+        !isLeftEdge &&
+        arrayWithBombs[i - 1 - width] === "bomb"
+      )
+        total++;
+      if (
+        i < width * width - 2 &&
+        !isRightEdge &&
+        arrayWithBombs[i + 1] === "bomb"
+      )
+        total++;
+      if (
+        i < width * width - width &&
+        !isLeftEdge &&
+        arrayWithBombs[i - 1 + width] === "bomb"
+      )
+        total++;
+      if (
+        i < width * width - width - 2 &&
+        !isRightEdge &&
+        arrayWithBombs[i + 1 + width] === "bomb"
+      )
+        total++;
+      if (i < width * width - width - 1 && arrayWithBombs[i + width] === "bomb")
+        total++;
+      arrayWithBombs[i] = total;
     }
-    console.log(arrayWithBombs)
+    console.log(arrayWithBombs);
   }
 }
 
@@ -80,10 +115,9 @@ field.addEventListener("click", (e) => {
   startTimer();
 });
 
-
 //function to contextmenu click
 field.addEventListener("contextmenu", (e) => {
-    e.preventDefault()
+  e.preventDefault();
   console.log("cont");
   if (e.target.classList.contains("field__button_flag")) {
     e.target.classList = "field__button field__button_question";
@@ -101,7 +135,6 @@ function startGame() {}
 
 function setupGame() {}
 
-
 // timer function
 function startTimer() {
   const firstInputNumber = document.querySelector(".heading__first-time");
@@ -110,24 +143,25 @@ function startTimer() {
   const timerInterval = setInterval(() => {
     timer++;
     if (timer < 10) {
-      thirdInputNumber.style.backgroundPosition = numbersPositionArray[timer];
+      thirdInputNumber.style.backgroundPosition =
+        numbersTimerPositionArray[timer];
     } else if (timer >= 10 && timer < 100) {
       const secondNumber = Math.floor(timer / 10);
       const thirdNumber = timer % 10;
       secondInputNumber.style.backgroundPosition =
-        numbersPositionArray[secondNumber];
+        numbersTimerPositionArray[secondNumber];
       thirdInputNumber.style.backgroundPosition =
-        numbersPositionArray[thirdNumber];
+        numbersTimerPositionArray[thirdNumber];
     } else if (timer >= 100 && timer < 1000) {
       const firstNumber = Math.floor(timer / 100);
       const secondNumber = Math.floor(timer / 10) % 10;
       const thirdNumber = (timer % 100) % 10;
       firstInputNumber.style.backgroundPosition =
-        numbersPositionArray[firstNumber];
+        numbersTimerPositionArray[firstNumber];
       secondInputNumber.style.backgroundPosition =
-        numbersPositionArray[secondNumber];
+        numbersTimerPositionArray[secondNumber];
       thirdInputNumber.style.backgroundPosition =
-        numbersPositionArray[thirdNumber];
+        numbersTimerPositionArray[thirdNumber];
       if (timer >= 1000) {
         clearInterval(timerInterval);
       }
