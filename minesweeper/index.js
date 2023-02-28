@@ -1,8 +1,8 @@
 const field = document.querySelector(".field");
-const smile = document.querySelector('.heading__smile')
+const smile = document.querySelector(".heading__smile");
 const width = 16;
 let bombsAmount = 40;
-let flagsCounter = 40
+let flagsCounter = 40;
 let timer = 0;
 let isGameOver = false;
 let arrayWithBombs = [];
@@ -40,13 +40,12 @@ const anotherIcons = {
 };
 
 const smilesIcons = {
-    smile: '0 -24px',
-    sad: '-108px -24px',
-    glasses: '-82px -24px',
-    scary: '-54px -24px',
-    clicked: '-28px -24px',
-}
-
+  smile: "0 -24px",
+  sad: "-108px -24px",
+  glasses: "-82px -24px",
+  scary: "-54px -24px",
+  clicked: "-28px -24px",
+};
 
 //creation html field
 createField(width);
@@ -59,14 +58,12 @@ function createField(width) {
   createResultArray();
 }
 
-
 //create new array
 function createResultArray() {
   arrayWithBombs = Array(width * width)
     .fill(0)
     .fill("bomb", 0, bombsAmount)
     .sort(() => Math.random() - 0.5);
-  console.log(arrayWithBombs);
 
   for (let i = 0; i < arrayWithBombs.length; i++) {
     let total = 0;
@@ -89,60 +86,72 @@ function createResultArray() {
       )
         total++;
       if (
-        i < width * width - 2 &&
+        i < width * width - 1 &&
         !isRightEdge &&
         arrayWithBombs[i + 1] === "bomb"
       )
         total++;
       if (
-        i < width * width - width &&
+        i < width * width - width + 1 &&
         !isLeftEdge &&
         arrayWithBombs[i - 1 + width] === "bomb"
       )
         total++;
       if (
-        i < width * width - width - 2 &&
+        i < width * width - width - 1 &&
         !isRightEdge &&
         arrayWithBombs[i + 1 + width] === "bomb"
       )
         total++;
-      if (i < width * width - width - 1 && arrayWithBombs[i + width] === "bomb")
+      if (i < width * width - width && arrayWithBombs[i + width] === "bomb")
         total++;
       arrayWithBombs[i] = total;
     }
-    console.log(arrayWithBombs);
   }
+  console.log(arrayWithBombs);
 }
-
-
-
 
 // functions for mousedown events
 field.addEventListener("mousedown", (e) => {
-smile.style.backgroundPosition = smilesIcons.scary
-  e.target.style.backgroundPosition = anotherIcons.empty
+  smile.style.backgroundPosition = smilesIcons.scary;
+  e.target.style.backgroundPosition = anotherIcons.empty;
 });
 
 field.addEventListener("mouseup", (e) => {
-    smile.style.backgroundPosition = smilesIcons.smile
+  smile.style.backgroundPosition = smilesIcons.smile;
 });
 
 smile.addEventListener("mousedown", () => {
-    smile.style.backgroundPosition = smilesIcons.clicked
-})
-
+  smile.style.backgroundPosition = smilesIcons.clicked;
+});
 
 //function to start timer
 
 field.addEventListener("click", (e) => {
   const cells = Array.from(document.querySelectorAll(".field__button"));
   const currentTargetIndex = cells.indexOf(e.target);
+  renderCell(currentTargetIndex);
 
+  //   startTimer();
+});
+
+function renderCell(currentTargetIndex) {
+  console.log("render");
+  const cells = Array.from(document.querySelectorAll(".field__button"));
+  if (cells[currentTargetIndex].classList.contains("checked")) return;
   if (typeof arrayWithBombs[currentTargetIndex] === "number") {
-    e.target.style.backgroundPosition =
-      numbersFieldArray[arrayWithBombs[currentTargetIndex]];
+    if (arrayWithBombs[currentTargetIndex] !== 0) {
+      cells[currentTargetIndex].classList.add("checked");
+      cells[currentTargetIndex].style.backgroundPosition =
+        numbersFieldArray[arrayWithBombs[currentTargetIndex]];
+    } else {
+      cells[currentTargetIndex].classList.add("checked");
+      cells[currentTargetIndex].style.backgroundPosition =
+        numbersFieldArray[arrayWithBombs[currentTargetIndex]];
+      checkCell(currentTargetIndex);
+    }
   } else {
-    e.target.style.backgroundPosition = anotherIcons.redBomb;
+    cells[currentTargetIndex].style.backgroundPosition = anotherIcons.redBomb;
     for (let i = 0; i < arrayWithBombs.length; i++) {
       if (cells[i].style.backgroundPosition === anotherIcons.question) continue;
       if (
@@ -156,15 +165,13 @@ field.addEventListener("click", (e) => {
     }
     gameOver();
   }
-
-  //   startTimer();
-});
+}
 
 //function to contextmenu click
 field.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   if (e.target.style.backgroundPosition === anotherIcons.flag) {
-    bombsCount(+1)
+    bombsCount(+1);
     e.target.style.backgroundPosition = anotherIcons.question;
     e.target.disabled = true;
   } else if (e.target.style.backgroundPosition === anotherIcons.question) {
@@ -172,34 +179,27 @@ field.addEventListener("contextmenu", (e) => {
     e.target.disabled = false;
   } else {
     e.target.style.backgroundPosition = anotherIcons.flag;
-    bombsCount(-1)
+    bombsCount(-1);
     e.target.disabled = true;
   }
 });
 
 function startGame() {}
 
-
-
-smile.addEventListener('click', setupGame)
+smile.addEventListener("click", setupGame);
 function setupGame() {
-    const cells = document.querySelectorAll('.field__button')
-    for (let i = 0; i < cells.length; i++){
-        cells[i].style.backgroundPosition = anotherIcons.closed
-    }
-    smile.style.backgroundPosition = smilesIcons.smile
-    timer = 0
-
+  const cells = document.querySelectorAll(".field__button");
+  for (let i = 0; i < cells.length; i++) {
+    cells[i].style.backgroundPosition = anotherIcons.closed;
+  }
+  smile.style.backgroundPosition = smilesIcons.smile;
+  timer = 0;
 }
-
-
 
 function gameOver() {
-smile.style.backgroundPosition = smilesIcons.sad
-//   clearInterval(timerInterval);
+  smile.style.backgroundPosition = smilesIcons.sad;
+  //   clearInterval(timerInterval);
 }
-
-
 
 // timer function
 function startTimer() {
@@ -236,17 +236,66 @@ function startTimer() {
 }
 
 // bombs counter function
-function bombsCount(number){
-bombsAmount +=number
-console.log(bombsAmount)
-if (bombsAmount < 0) return
-if (bombsAmount >= 10){
-document.querySelector('.heading__second-number').style.backgroundPosition = numbersTimerPositionArray[Math.floor(bombsAmount / 10)]
-document.querySelector('.heading__third-number').style.backgroundPosition = numbersTimerPositionArray[bombsAmount % 10]
-}
-else{
-    document.querySelector('.heading__second-number').style.backgroundPosition = numbersTimerPositionArray[0]
-    document.querySelector('.heading__third-number').style.backgroundPosition = numbersTimerPositionArray[bombsAmount]
+function bombsCount(number) {
+  bombsAmount += number;
+  console.log(bombsAmount);
+  if (bombsAmount < 0) return;
+  if (bombsAmount >= 10) {
+    document.querySelector(".heading__second-number").style.backgroundPosition =
+      numbersTimerPositionArray[Math.floor(bombsAmount / 10)];
+    document.querySelector(".heading__third-number").style.backgroundPosition =
+      numbersTimerPositionArray[bombsAmount % 10];
+  } else {
+    document.querySelector(".heading__second-number").style.backgroundPosition =
+      numbersTimerPositionArray[0];
+    document.querySelector(".heading__third-number").style.backgroundPosition =
+      numbersTimerPositionArray[bombsAmount];
+  }
 }
 
+function checkCell(currentIndex) {
+  const isLeftEdge = currentIndex % width === 0;
+  const isRightEdge = currentIndex % width === width - 1;
+
+  setTimeout(() => {
+    if (currentIndex > 0 && !isLeftEdge) {
+      const newIndex = parseInt(currentIndex) - 1;
+      renderCell(newIndex);
+    }
+    if (currentIndex > width - 1 && !isRightEdge) {
+      const newIndex = parseInt(currentIndex) + 1 - width;
+
+      renderCell(newIndex);
+    }
+    if (currentIndex > width) {
+      const newIndex = parseInt(currentIndex - width);
+
+      renderCell(newIndex);
+    }
+    if (currentIndex > width + 1 && !isLeftEdge) {
+      const newIndex = parseInt(currentIndex) - 1 - width;
+
+      renderCell(newIndex);
+    }
+    if (currentIndex < width * width - 1 && !isRightEdge) {
+      const newIndex = parseInt(currentIndex) + 1;
+
+      renderCell(newIndex);
+    }
+    if (currentIndex < width * width - width + 1 && !isLeftEdge) {
+      const newIndex = parseInt(currentIndex) - 1 + width;
+
+      renderCell(newIndex);
+    }
+    if (currentIndex < width * width - width - 1 && !isRightEdge) {
+      const newIndex = parseInt(currentIndex) + 1 + width;
+
+      renderCell(newIndex);
+    }
+    if (currentIndex < width * width - width) {
+      const newIndex = parseInt(currentIndex) + width;
+
+      renderCell(newIndex);
+    }
+  }, 10);
 }
