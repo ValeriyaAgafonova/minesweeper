@@ -1,4 +1,8 @@
 const field = document.querySelector(".field");
+const width = 16;
+const bombsAmount = 40;
+let timer = 0;
+let isGameOVer = false;
 const numbersPositionArray = [
   "-126px top",
   "0px top",
@@ -11,21 +15,49 @@ const numbersPositionArray = [
   "-98px top",
   "-112px top",
 ];
-let timer = 989;
-createField(16, 40);
 
-function createField(width, mines) {
+
+//creation html field
+createField(width);
+
+function createField(width) {
   const cellsAmount = width * width;
   field.innerHTML = '<button class="field__button"></button>'.repeat(
     cellsAmount
   );
-  const bombs = Array(cellsAmount)
-    .fill(0)
-    .fill(1, 0, mines - 1)
-    .sort(() => Math.random() - 0.5);
-  console.log(bombs);
+ createResultArray()
 }
 
+
+//create new array
+function createResultArray(){
+    const arrayWithBombs = Array(width * width)
+    .fill(0)
+    .fill('bomb', 0, bombsAmount - 1)
+    .sort(() => Math.random() - 0.5);
+console.log(arrayWithBombs)
+
+for (let i = 0; i < arrayWithBombs.length; i++) {
+    let total = 0
+    const isLeftEdge = (i % width === 0)
+    const isRightEdge = (i % width === width - 1)
+
+    if (arrayWithBombs[i] === 0) {
+      if (i > 0 && !isLeftEdge && arrayWithBombs[i -1] === 'bomb') total ++
+      if (i > (width - 1) && !isRightEdge && arrayWithBombs[i +1 -width] === 'bomb') total ++
+      if (i > width && arrayWithBombs[i -width] === 'bomb') total ++
+      if (i > width + 1 && !isLeftEdge && arrayWithBombs[i -1 -width] === 'bomb') total ++
+      if (i < (width * width -2) && !isRightEdge && arrayWithBombs[i +1] === 'bomb') total ++
+      if (i < (width * width - width) && !isLeftEdge && arrayWithBombs[i -1 +width] === 'bomb') total ++
+      if (i < (width * width - width - 2) && !isRightEdge && arrayWithBombs[i +1 +width] === 'bomb') total ++
+      if (i < (width * width - width - 1) && arrayWithBombs[i +width] === 'bomb') total ++
+      arrayWithBombs[i] =  total
+    }
+    console.log(arrayWithBombs)
+  }
+}
+
+// functions to change state of smile
 field.addEventListener("mousedown", (e) => {
   document
     .querySelector(".heading__smile")
@@ -40,13 +72,18 @@ field.addEventListener("mouseup", (e) => {
   e.target.classList.remove("field__button_empty");
 });
 
+//function to start timer
+
 field.addEventListener("click", (e) => {
   const cells = Array.from(document.querySelectorAll(".field__button"));
   const currentTargetIndex = cells.indexOf(e.target);
   startTimer();
 });
 
+
+//function to contextmenu click
 field.addEventListener("contextmenu", (e) => {
+    e.preventDefault()
   console.log("cont");
   if (e.target.classList.contains("field__button_flag")) {
     e.target.classList = "field__button field__button_question";
@@ -62,6 +99,10 @@ field.addEventListener("contextmenu", (e) => {
 
 function startGame() {}
 
+function setupGame() {}
+
+
+// timer function
 function startTimer() {
   const firstInputNumber = document.querySelector(".heading__first-time");
   const secondInputNumber = document.querySelector(".heading__second-time");
