@@ -44,9 +44,7 @@ display: flex;
     background-repeat: no-repeat;
     background-position: 0 -24px;
 }
-.heading__smile_scary{
-    background-position: -54px -24px;
-}
+
 .heading__first-time{
     background-position: -126px top;
 }
