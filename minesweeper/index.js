@@ -199,7 +199,7 @@ field.addEventListener("contextmenu", (e) => {
 smile.addEventListener("click", setupGame);
 function setupGame() {
   createResultArray();
-  bombsAmount = 40;
+  bombsWithFlags = 40;
   isGameOver = false;
   timer = 0;
   for (let i = 0; i < cells.length; i++) {
