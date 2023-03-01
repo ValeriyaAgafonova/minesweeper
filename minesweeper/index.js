@@ -1,7 +1,16 @@
 const field = document.querySelector(".field");
 const smile = document.querySelector(".heading__smile");
+
+const firstInputNumber = document.querySelector(".heading__first-time");
+const secondInputNumber = document.querySelector(".heading__second-time");
+const thirdInputNumber = document.querySelector(".heading__third-time");
+
+const secondBombNumber = document.querySelector(".heading__second-number");
+const thirdBombNumber = document.querySelector(".heading__third-number");
+let cells = [];
 const width = 16;
-let bombsAmount = 40;
+const bombsAmount = 40;
+let bombsWithFlags = 40;
 let flagsCounter = 40;
 let timer = 0;
 let isGameOver = false;
@@ -108,16 +117,18 @@ function createResultArray() {
       arrayWithBombs[i] = total;
     }
   }
-  console.log(arrayWithBombs);
+  cells = Array.from(document.querySelectorAll(".field__button"));
 }
 
 // functions for mousedown events
 field.addEventListener("mousedown", (e) => {
+  if (isGameOver) return;
   smile.style.backgroundPosition = smilesIcons.scary;
   e.target.style.backgroundPosition = anotherIcons.empty;
 });
 
 field.addEventListener("mouseup", (e) => {
+  if (isGameOver) return;
   smile.style.backgroundPosition = smilesIcons.smile;
 });
 
@@ -125,27 +136,25 @@ smile.addEventListener("mousedown", () => {
   smile.style.backgroundPosition = smilesIcons.clicked;
 });
 
-//function to start timer
+//function to start game
 
 field.addEventListener("click", (e) => {
-  const cells = Array.from(document.querySelectorAll(".field__button"));
+  if (isGameOver) return;
+  if (timer === 0) {
+    startTimer();
+  }
   const currentTargetIndex = cells.indexOf(e.target);
   renderCell(currentTargetIndex);
-
-  //   startTimer();
 });
 
 function renderCell(currentTargetIndex) {
-  console.log("render");
-  const cells = Array.from(document.querySelectorAll(".field__button"));
   if (cells[currentTargetIndex].classList.contains("checked")) return;
   if (typeof arrayWithBombs[currentTargetIndex] === "number") {
+    cells[currentTargetIndex].classList.add("checked");
     if (arrayWithBombs[currentTargetIndex] !== 0) {
-      cells[currentTargetIndex].classList.add("checked");
       cells[currentTargetIndex].style.backgroundPosition =
         numbersFieldArray[arrayWithBombs[currentTargetIndex]];
     } else {
-      cells[currentTargetIndex].classList.add("checked");
       cells[currentTargetIndex].style.backgroundPosition =
         numbersFieldArray[arrayWithBombs[currentTargetIndex]];
       checkCell(currentTargetIndex);
@@ -163,7 +172,8 @@ function renderCell(currentTargetIndex) {
         cells[i].style.backgroundPosition = anotherIcons.whiteBomb;
       }
     }
-    gameOver();
+    smile.style.backgroundPosition = smilesIcons.sad;
+    isGameOver = true;
   }
 }
 
@@ -182,32 +192,37 @@ field.addEventListener("contextmenu", (e) => {
     bombsCount(-1);
     e.target.disabled = true;
   }
+  matchBombs();
 });
 
-function startGame() {}
-
+// setup game
 smile.addEventListener("click", setupGame);
 function setupGame() {
-  const cells = document.querySelectorAll(".field__button");
+  createResultArray();
+  bombsAmount = 40;
+  isGameOver = false;
+  timer = 0;
   for (let i = 0; i < cells.length; i++) {
     cells[i].style.backgroundPosition = anotherIcons.closed;
+    cells[i].classList.remove("checked");
   }
   smile.style.backgroundPosition = smilesIcons.smile;
-  timer = 0;
-}
 
-function gameOver() {
-  smile.style.backgroundPosition = smilesIcons.sad;
-  //   clearInterval(timerInterval);
+  secondBombNumber.style.backgroundPosition = numbersTimerPositionArray[4];
+  thirdBombNumber.style.backgroundPosition = numbersTimerPositionArray[0];
+  
+  firstInputNumber.style.backgroundPosition = numbersTimerPositionArray[0];
+  secondInputNumber.style.backgroundPosition = numbersTimerPositionArray[0];
+  thirdInputNumber.style.backgroundPosition = numbersTimerPositionArray[0];
 }
 
 // timer function
 function startTimer() {
-  const firstInputNumber = document.querySelector(".heading__first-time");
-  const secondInputNumber = document.querySelector(".heading__second-time");
-  const thirdInputNumber = document.querySelector(".heading__third-time");
   const timerInterval = setInterval(() => {
     timer++;
+    if (timer >= 1000 || isGameOver === true) {
+      clearInterval(timerInterval);
+    }
     if (timer < 10) {
       thirdInputNumber.style.backgroundPosition =
         numbersTimerPositionArray[timer];
@@ -228,31 +243,29 @@ function startTimer() {
         numbersTimerPositionArray[secondNumber];
       thirdInputNumber.style.backgroundPosition =
         numbersTimerPositionArray[thirdNumber];
-      if (timer >= 1000) {
-        clearInterval(timerInterval);
-      }
     }
   }, 1000);
 }
 
 // bombs counter function
 function bombsCount(number) {
-  bombsAmount += number;
-  console.log(bombsAmount);
-  if (bombsAmount < 0) return;
-  if (bombsAmount >= 10) {
+  bombsWithFlags += number;
+
+  if (bombsWithFlags < 0) return;
+  if (bombsWithFlags >= 10) {
     document.querySelector(".heading__second-number").style.backgroundPosition =
-      numbersTimerPositionArray[Math.floor(bombsAmount / 10)];
+      numbersTimerPositionArray[Math.floor(bombsWithFlags / 10)];
     document.querySelector(".heading__third-number").style.backgroundPosition =
-      numbersTimerPositionArray[bombsAmount % 10];
+      numbersTimerPositionArray[bombsWithFlags % 10];
   } else {
     document.querySelector(".heading__second-number").style.backgroundPosition =
       numbersTimerPositionArray[0];
     document.querySelector(".heading__third-number").style.backgroundPosition =
-      numbersTimerPositionArray[bombsAmount];
+      numbersTimerPositionArray[bombsWithFlags];
   }
 }
 
+//checking cells around
 function checkCell(currentIndex) {
   const isLeftEdge = currentIndex % width === 0;
   const isRightEdge = currentIndex % width === width - 1;
@@ -264,38 +277,49 @@ function checkCell(currentIndex) {
     }
     if (currentIndex > width - 1 && !isRightEdge) {
       const newIndex = parseInt(currentIndex) + 1 - width;
-
       renderCell(newIndex);
     }
     if (currentIndex > width) {
       const newIndex = parseInt(currentIndex - width);
-
       renderCell(newIndex);
     }
     if (currentIndex > width + 1 && !isLeftEdge) {
       const newIndex = parseInt(currentIndex) - 1 - width;
-
       renderCell(newIndex);
     }
     if (currentIndex < width * width - 1 && !isRightEdge) {
       const newIndex = parseInt(currentIndex) + 1;
-
       renderCell(newIndex);
     }
     if (currentIndex < width * width - width + 1 && !isLeftEdge) {
       const newIndex = parseInt(currentIndex) - 1 + width;
-
       renderCell(newIndex);
     }
     if (currentIndex < width * width - width - 1 && !isRightEdge) {
       const newIndex = parseInt(currentIndex) + 1 + width;
-
       renderCell(newIndex);
     }
     if (currentIndex < width * width - width) {
       const newIndex = parseInt(currentIndex) + width;
-
       renderCell(newIndex);
     }
   }, 10);
+}
+
+
+// check matches bombs with flags
+function matchBombs() {
+  let matches = 0;
+  for (let i = 0; i < arrayWithBombs.length; i++) {
+    if (
+      cells[i].style.backgroundPosition === anotherIcons.flag &&
+      arrayWithBombs[i] === "bomb"
+    ) {
+      matches++;
+    }
+    if (matches === bombsAmount) {
+      smile.style.backgroundPosition = smilesIcons.glasses
+      isGameOver = true;
+    }
+  }
 }
