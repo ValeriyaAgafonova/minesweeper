@@ -1,0 +1,80 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+}
+.main{
+    margin-top: 50px;
+    border: 10px solid rgb(198, 196, 196);
+border-style: ridge;
+}
+.heading{
+    border-bottom: 10px solid rgb(198, 196, 196);
+    border-style: ridge;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(205, 201, 201);
+}
+.heading__bombs-number,
+.heading__timer{
+display: flex;
+}
+.heading__number{
+    height: 24px;
+    width: 13px;
+    background-image: url(./assets/images/minesweeper-sprites_9TPZzv3.png);
+    background-repeat: no-repeat;
+}
+.heading__first-number{
+    background-position: -126px top;
+}
+.heading__second-number{
+    background-position: -42px top;
+}
+.heading__third-number{
+    background-position: -126px top;
+}
+.heading__smile{
+    height: 26px;
+    width: 26px;
+    background-image: url(./assets/images/minesweeper-sprites_9TPZzv3.png);
+    background-repeat: no-repeat;
+    background-position: 0 -24px;
+}
+
+.heading__first-time{
+    background-position: -126px top;
+}
+.heading__second-time{
+    background-position: -126px top;
+}
+.heading__third-time{
+    background-position: -126px top;
+}
+
+.field{
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(16, 18px);
+}
+
+.field__button{
+    width: 18px;
+    height: 18px;
+    background-image: url(./assets/images/minesweeper-sprites_9TPZzv3.png);
+    background-repeat: no-repeat;
+    background-position: 1px -50px;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+}
+.field__button:disabled{
+   border: none;
+   list-style: none;
+   background-color: white;
+}
+
+
